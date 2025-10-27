@@ -1,3 +1,6 @@
+include <BOSL2/std.scad>;
+
+$fn = $preview ? 64 : 256;
 epsilon = 0.002;
 
 module fan_holder(fan_size = 120, fan_thickness = 25, wall_thickness = 2, screw_diameter = 5, screw_spacing_from_corner = 8) {
@@ -11,15 +14,13 @@ module fan_holder(fan_size = 120, fan_thickness = 25, wall_thickness = 2, screw_
           difference() {
             difference() {
               // main box
-              // TODO fillet corners
-              cube([fan_size + wall_thickness * 2, fan_size + wall_thickness * 2, fan_thickness + wall_thickness]);
+              cuboid([fan_size + wall_thickness * 2, fan_size + wall_thickness * 2, fan_thickness + wall_thickness], anchor=BOTTOM+LEFT+FRONT, chamfer = 0.4);
               translate([wall_thickness, wall_thickness, wall_thickness])
-                cube([fan_size, fan_size, fan_thickness + epsilon]);
+                cuboid([fan_size, fan_size, fan_thickness + epsilon], anchor=BOTTOM+LEFT+FRONT, chamfer = -0.4, edges=TOP);
             }
             // circle cutout
             translate([fan_size / 2 + wall_thickness, fan_size / 2 + wall_thickness, -epsilon])
-              cylinder(h=wall_thickness + 2 * epsilon, r=fan_size / 2);
-            // TODO fillet corners of the cutout too
+              cyl(h=wall_thickness + 2 * epsilon, r=fan_size / 2, anchor=BOTTOM, chamfer = -0.4);
           }
           // (0, 0) screw hole
           translate([close_corner_coords, close_corner_coords, -epsilon])

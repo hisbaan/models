@@ -1,6 +1,7 @@
+include <BOSL2/std.scad>;
 use <clip.scad>;
 
-$fn = 64;
+$fn = $preview ? 64 : 256;
 epsilon = 0.002;
 
 module filter_holder(
@@ -33,13 +34,13 @@ module filter_holder(
                   difference() {
                     // main box
                     difference() {
-                      cube([fan_size + wall_thickness * 2, fan_size + wall_thickness * 2, filter_thickness + wall_thickness]);
+                      cuboid([fan_size + wall_thickness * 2, fan_size + wall_thickness * 2, filter_thickness + wall_thickness], anchor=BOTTOM+LEFT+FRONT, chamfer = 0.4);
                       translate([wall_thickness, wall_thickness, wall_thickness])
-                        cube([fan_size, fan_size, filter_thickness + epsilon]);
+                        cuboid([fan_size, fan_size, filter_thickness + epsilon], anchor=BOTTOM+LEFT+FRONT, chamfer = -0.4, edges = TOP);
                     }
                     // circle cutout
                     translate([fan_size / 2 + wall_thickness, fan_size / 2 + wall_thickness, -epsilon])
-                      cylinder(h=wall_thickness + 2 * epsilon, r=fan_size / 2);
+                      cyl(l=wall_thickness + 2 * epsilon, r=fan_size / 2, anchor=BOTTOM, chamfer = -0.4);
                   }
                   // (0, 0) screw hole
                   translate([close_corner_coords, close_corner_coords, -epsilon])

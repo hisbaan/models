@@ -1,6 +1,7 @@
-use <BOSL2/std.scad>;
+include <BOSL2/std.scad>;
 use <clip.scad>;
-$fn = 64;
+
+$fn = $preview ? 64 : 256;
 epsilon = 0.002;
 
 module filter_holder_cover(
@@ -13,9 +14,18 @@ module filter_holder_cover(
   clip_detent_size = 1.2,
 ) {
   difference() {
-    cube([fan_size + 2 * wall_thickness, fan_size + 2 * wall_thickness, wall_thickness]);
-    translate([lip_size + wall_thickness, lip_size + wall_thickness, -epsilon])
-      cube([fan_size - 2 * lip_size, fan_size - 2 * lip_size, wall_thickness + 2 * epsilon]);
+    outer_dim = fan_size + 2 * wall_thickness;
+    cuboid([outer_dim, outer_dim, wall_thickness], anchor=BOTTOM+LEFT+FRONT, chamfer=0.4);
+
+    inner_dim = fan_size - 2 * lip_size;
+    translate(
+      [
+        lip_size + wall_thickness,
+        lip_size + wall_thickness,
+        - epsilon,
+      ]
+    )
+      cuboid([inner_dim, inner_dim, wall_thickness + 4 * epsilon], anchor=BOTTOM+LEFT+FRONT, chamfer=-0.4);
   }
 
   close_x = wall_thickness + clip_width / 2;
@@ -38,4 +48,4 @@ module filter_holder_cover(
     clip(height=clip_height, thickness=clip_thickness, width=clip_width, detent_size=clip_detent_size);
 }
 
-filter_holder_cover(fan_size = 20, lip_size = 5);
+filter_holder_cover(fan_size=20, lip_size=5);

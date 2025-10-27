@@ -1,4 +1,4 @@
-$fn = 64;
+$fn = $preview ? 64 : 128;
 epsilon = 0.002;
 
 module clip(height = 6, thickness = 1.2, width = 2.4, detent_size = 1.2) {
