@@ -5,79 +5,54 @@ $fn = $preview ? 64 : 256;
 epsilon = 0.002;
 
 module filter_holder(
-  fan_size = 120,
+  fan_size = 120 + 1,
   filter_thickness = 10,
   wall_thickness = 2,
-  screw_diameter = 5,
+  screw_diameter = 3.6,
   screw_spacing_from_corner = 8,
-  clip_height = 6,
-  clip_width = 2.4,
-  clip_thickness = 1.2,
-  clip_detent_size = 1.2,
+  screw_chamfer = -1.6,
+  joiner_height = 2,
 ) {
   close_corner_coords = screw_spacing_from_corner - screw_diameter / 2 + wall_thickness;
   far_corner_coords = fan_size + wall_thickness - screw_spacing_from_corner + screw_diameter / 2;
 
-  clip_close_x = wall_thickness + clip_width / 2;
-  clip_close_y = wall_thickness + clip_thickness / 2;
-  clip_far_x = fan_size + wall_thickness - clip_width / 2;
-  clip_far_y = fan_size + wall_thickness - clip_thickness / 2;
+  box_height = filter_thickness + joiner_height;
+
+  screw_hole_height = wall_thickness + 2 * epsilon;
+  screw_hole_radius = screw_diameter / 2;
 
   difference() {
     difference() {
       difference() {
         difference() {
           difference() {
+            // main box
             difference() {
-              difference() {
-                difference() {
-                  difference() {
-                    // main box
-                    difference() {
-                      cuboid([fan_size + wall_thickness * 2, fan_size + wall_thickness * 2, filter_thickness + wall_thickness], anchor=BOTTOM+LEFT+FRONT, chamfer = 0.4);
-                      translate([wall_thickness, wall_thickness, wall_thickness])
-                        cuboid([fan_size, fan_size, filter_thickness + epsilon], anchor=BOTTOM+LEFT+FRONT, chamfer = -0.4, edges = TOP);
-                    }
-                    // circle cutout
-                    translate([fan_size / 2 + wall_thickness, fan_size / 2 + wall_thickness, -epsilon])
-                      cyl(l=wall_thickness + 2 * epsilon, r=fan_size / 2, anchor=BOTTOM, chamfer = -0.4);
-                  }
-                  // (0, 0) screw hole
-                  translate([close_corner_coords, close_corner_coords, -epsilon])
-                    cylinder(h=wall_thickness + 2 * epsilon, r=screw_diameter / 2);
-                }
-                // (1, 0) screw hole
-                translate([far_corner_coords, close_corner_coords, -epsilon])
-                  cylinder(h=wall_thickness + 2 * epsilon, r=screw_diameter / 2);
-              }
-              // (0, 1) screw hole
-              translate([close_corner_coords, far_corner_coords, -epsilon])
-                cylinder(h=wall_thickness + 2 * epsilon, r=screw_diameter / 2);
+              cuboid([fan_size + wall_thickness * 2, fan_size + wall_thickness * 2, box_height + wall_thickness], anchor=BOTTOM + LEFT + FRONT, chamfer=0.4);
+              translate([wall_thickness, wall_thickness, wall_thickness])
+                cuboid([fan_size, fan_size, box_height + epsilon], anchor=BOTTOM + LEFT + FRONT, chamfer=-0.4, edges=TOP);
             }
-            // (1, 1) screw hole
-            translate([far_corner_coords, far_corner_coords, -epsilon])
-              cylinder(h=wall_thickness + 2 * epsilon, r=screw_diameter / 2);
+            // circle cutout
+            translate([fan_size / 2 + wall_thickness, fan_size / 2 + wall_thickness, -epsilon])
+              cyl(l=wall_thickness + 2 * epsilon, r=fan_size / 2, anchor=BOTTOM, chamfer=-0.4);
           }
-          // clip cutout (0, 0)
-          translate([clip_close_x, clip_close_y, filter_thickness + wall_thickness])
-            rotate([180, 0, 0])
-              clip();
+          // (0, 0) screw hole
+          // TODO measure screw, set correct chamfer, diameter, etc
+          translate([close_corner_coords, close_corner_coords, -epsilon])
+            cyl(h=screw_hole_height, r=screw_hole_radius, anchor=BOTTOM, chamfer2=screw_chamfer);
         }
-        // clip cutout (0, 1)
-        translate([clip_close_x, clip_far_y, filter_thickness + wall_thickness])
-          rotate([0, 180, 0])
-            clip();
+        // (1, 0) screw hole
+        translate([far_corner_coords, close_corner_coords, -epsilon])
+          cyl(h=screw_hole_height, r=screw_hole_radius, anchor=BOTTOM, chamfer2=screw_chamfer);
       }
-      // clip cutout (1, 0)
-      translate([clip_far_x, clip_close_y, filter_thickness + wall_thickness])
-        rotate([180, 0, 0])
-          clip();
+      // (0, 1) screw hole
+      translate([close_corner_coords, far_corner_coords, -epsilon])
+        cyl(h=screw_hole_height, r=screw_hole_radius, anchor=BOTTOM, chamfer2=screw_chamfer);
     }
-    // clip cutout (1, 1)
-    translate([clip_far_x, clip_far_y, filter_thickness + wall_thickness])
-      rotate([0, 180, 0])
-        clip();
+    // (1, 1) screw hole
+    translate([far_corner_coords, far_corner_coords, -epsilon])
+      cyl(h=screw_hole_height, r=screw_hole_radius, anchor=BOTTOM, chamfer2=screw_chamfer);
   }
 }
 
-filter_holder(20);
+filter_holder();
