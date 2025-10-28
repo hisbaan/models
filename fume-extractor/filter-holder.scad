@@ -13,8 +13,8 @@ module filter_holder(
   screw_chamfer = -1.6,
   joiner_height = 2,
 ) {
-  close_corner_coords = screw_spacing_from_corner - screw_diameter / 2 + wall_thickness;
-  far_corner_coords = fan_size + wall_thickness - screw_spacing_from_corner + screw_diameter / 2;
+  close_corner_coords = screw_spacing_from_corner + wall_thickness;
+  far_corner_coords = fan_size + wall_thickness - screw_spacing_from_corner;
 
   box_height = filter_thickness + joiner_height;
 

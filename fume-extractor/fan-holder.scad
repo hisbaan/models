@@ -15,8 +15,8 @@ module fan_holder(
   joiner_height = 2,
   joiner_thickness = 1.2
 ) {
-  close_corner_coords = screw_spacing_from_corner - screw_diameter / 2 + wall_thickness;
-  far_corner_coords = fan_size + wall_thickness - screw_spacing_from_corner + screw_diameter / 2;
+  close_corner_coords = screw_spacing_from_corner + wall_thickness;
+  far_corner_coords = fan_size + wall_thickness - screw_spacing_from_corner;
 
   screw_hole_height = wall_thickness + 2 * epsilon;
   screw_hole_radius = screw_diameter / 2;
