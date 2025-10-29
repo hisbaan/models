@@ -4,7 +4,7 @@ $fn = $preview ? 64 : 256;
 epsilon = 0.002;
 
 module base(
-  fan_size = 40,
+  fan_size = 120 + 1,
   fan_thickness = 25,
   wall_thickness = 2,
   base_height = 10,
@@ -81,8 +81,5 @@ module base(
     }
   }
 }
-
-// pcb is 11 x 23 x 1 mm
-module pcb_mount(length, width, thickness){}
 
 base();
