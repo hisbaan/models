@@ -140,7 +140,7 @@ module case() {
 
       // hotswap sockets
       for (key_corner = key_corners) {
-        translated_hotswap_socket(key_corner[0], key_corner[1], [1.1, 1.1, 1.1]);
+        translated_hotswap_socket(key_corner[0], key_corner[1], [1.2, 1.2, 1.2]);
       }
 
       for (key_corner = key_corners) {
@@ -171,7 +171,7 @@ module case() {
       translate([pcb_x + pcb_tolerance - 0.1, 34.75 + 7, case_floor_thickness + pcb_thickness])
         switch_cutout();
 
-      translate([pcb_x - 5.2, 7 - pcb_tolerance - case_wall_thickness - 0.1, case_floor_thickness + pcb_thickness])
+      translate([pcb_x - 5.7, 7 - pcb_tolerance - case_wall_thickness - 0.1, case_floor_thickness + pcb_thickness])
         usb_and_reset_switch_cutout();
     }
 }
@@ -220,12 +220,15 @@ module hotswap_socket(scale_matrix = [1, 1, 1]) {
           scale(scale_matrix)
             import("./kailh-choc-socket.stl", center=false);
       translate([7.18, -2, -epsilon])
-        cuboid([3.027, 2.975, 2.035], anchor=BOTTOM + LEFT + BACK);
+        cuboid([3.95, 3.43, 5], anchor=BOTTOM + LEFT + BACK);
     }
 }
 
 module translated_hotswap_socket(key_corner = [0, 0], angle = 0, scale_matrix = [1, 1, 1]) {
-  translate([key_corner[0], key_corner[1], 0]) rotate([0, 0, angle]) translate([key_x / 2, key_y / 2 + 5.29, 0]) hotswap_socket(scale_matrix);
+  translate([key_corner[0], key_corner[1], 0])
+    rotate([0, 0, angle])
+      translate([key_x / 2 - 1, key_y / 2 + 5.89, 0])
+        hotswap_socket(scale_matrix);
 }
 
 module translated_diode(key_corner = [0, 0], angle = 0) {
@@ -253,12 +256,12 @@ module translated_switch_pin_recess(key_corner = [0, 0], angle = 0) {
     color([0, 0.75, 0.75])
       rotate(angle)
         translate([key_x / 2, key_y / 2, case_floor_thickness + 2 * epsilon])
-          cyl(h=1 + epsilon, r=1.6, anchor=TOP);
+          cyl(h=1.2 + epsilon, r=1.8, anchor=TOP);
 }
 
 module translated_standoff_cutout(pos = [0, 0]) {
   translate([pos[0], pos[1], case_floor_thickness + 2 * epsilon])
-    cyl(h=1.2, r=1.45, anchor=TOP);
+    cyl(h=1.2, r=1.7, anchor=TOP);
 }
 
 module screw_holes(pos = [0, 0]) {
@@ -292,6 +295,6 @@ module usb_and_reset_switch_cutout() {
   );
 }
 
-frontplate_and_pcb();
+// frontplate_and_pcb();
 
 case();
