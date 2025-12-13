@@ -31,58 +31,15 @@ outer_padding = pcb_tolerance + case_wall_thickness;
 pcb_x = 133.755;
 pcb_y = 91.7155;
 
+index_stagger = -0.125;
+middle_stagger = -0.250;
+ring_stagger = -0.125;
+pinkie_stagger = 0.125;
+outer_stagger = 0.125;
+
 hotswap_socket_height = 1.9;
 
 module case() {
-  // first key bottom left coord
-  fx = 97.01;
-  fy = 6.73;
-
-  index_stagger = -0.125;
-  middle_stagger = -0.250;
-  ring_stagger = -0.125;
-  pinkie_stagger = 0.125;
-  outer_stagger = 0.125;
-
-  key_corners = [
-    // inner
-    [[fx, fy], 0],
-    [[fx, fy + ky], 0],
-    [[fx, fy + 2 * ky], 0],
-    // index
-    [[fx - kx, fy + index_stagger * ky], 0],
-    [[fx - kx, fy + ky + index_stagger * ky], 0],
-    [[fx - kx, fy + 2 * ky + index_stagger * ky], 0],
-    // middle
-    [[fx - 2 * kx, fy + middle_stagger * ky], 0],
-    [[fx - 2 * kx, fy + ky + middle_stagger * ky], 0],
-    [[fx - 2 * kx, fy + 2 * ky + middle_stagger * ky], 0],
-    // ring
-    [[fx - 3 * kx, fy + ring_stagger * ky], 0],
-    [[fx - 3 * kx, fy + ky + ring_stagger * ky], 0],
-    [[fx - 3 * kx, fy + 2 * ky + ring_stagger * ky], 0],
-    // pinkie
-    [[fx - 4 * kx, fy + pinkie_stagger * ky], 0],
-    [[fx - 4 * kx, fy + ky + pinkie_stagger * ky], 0],
-    [[fx - 4 * kx, fy + 2 * ky + pinkie_stagger * ky], 0],
-    // outer
-    [[fx - 5 * kx, fy + outer_stagger * ky], 0],
-    [[fx - 5 * kx, fy + ky + outer_stagger * ky], 0],
-    [[fx - 5 * kx, fy + 2 * ky + outer_stagger * ky], 0],
-    // thumb
-    [[fx - kx - key_padding_x - space_between_keys / 2 - key_x / 2, fy + 2 * ky + 17.25], 0],
-    [[fx - key_padding_x - space_between_keys / 2 - key_x / 2 + 4.0311, fy + 2 * ky + 18.4535], 15],
-    [[fx + kx - key_padding_x - space_between_keys / 2 - key_x / 2 + 9.625 - 6.89, fy + 2 * ky + 21.25 + 11.95], 30 - 90],
-  ];
-  if ($preview) {
-    translate([outer_padding, outer_padding, 5])
-      union() {
-        for (key_corner = key_corners) {
-          marker(key_corner[0]);
-        }
-      }
-  }
-
   screw_coords = [
     [18.42, 25.51],
     [18.42, 44.51],
@@ -138,19 +95,6 @@ module case() {
           offset(r=pcb_tolerance)
             polygon(case_corners);
 
-      // hotswap sockets
-      for (key_corner = key_corners) {
-        translated_hotswap_socket(key_corner[0], key_corner[1], [1.2, 1.2, 1.2]);
-      }
-
-      for (key_corner = key_corners) {
-        translated_switch_pin_recess(key_corner[0], key_corner[1]);
-      }
-
-      for (key_corner = key_corners) {
-        translated_diode(key_corner[0], key_corner[1]);
-      }
-
       // pins
       translate([pcb_x - 1, 10.65, case_floor_thickness - 1.3]) nice_nano_pins();
       translate([pcb_x - 15.9, 10.65, case_floor_thickness - 1.3]) nice_nano_pins();
@@ -173,7 +117,139 @@ module case() {
 
       translate([pcb_x - 5.7, 7 - pcb_tolerance - case_wall_thickness - 0.1, case_floor_thickness + pcb_thickness])
         usb_and_reset_switch_cutout();
+
+
     }
+}
+
+module right_case() {
+  // first key bottom left coord
+  fx = 97.01;
+  fy = 6.73;
+
+  key_corners = [
+    // inner
+    [[fx, fy], 0],
+    [[fx, fy + ky], 0],
+    [[fx, fy + 2 * ky], 0],
+    // index
+    [[fx - kx, fy + index_stagger * ky], 0],
+    [[fx - kx, fy + ky + index_stagger * ky], 0],
+    [[fx - kx, fy + 2 * ky + index_stagger * ky], 0],
+    // middle
+    [[fx - 2 * kx, fy + middle_stagger * ky], 0],
+    [[fx - 2 * kx, fy + ky + middle_stagger * ky], 0],
+    [[fx - 2 * kx, fy + 2 * ky + middle_stagger * ky], 0],
+    // ring
+    [[fx - 3 * kx, fy + ring_stagger * ky], 0],
+    [[fx - 3 * kx, fy + ky + ring_stagger * ky], 0],
+    [[fx - 3 * kx, fy + 2 * ky + ring_stagger * ky], 0],
+    // pinkie
+    [[fx - 4 * kx, fy + pinkie_stagger * ky], 0],
+    [[fx - 4 * kx, fy + ky + pinkie_stagger * ky], 0],
+    [[fx - 4 * kx, fy + 2 * ky + pinkie_stagger * ky], 0],
+    // outer
+    [[fx - 5 * kx, fy + outer_stagger * ky], 0],
+    [[fx - 5 * kx, fy + ky + outer_stagger * ky], 0],
+    [[fx - 5 * kx, fy + 2 * ky + outer_stagger * ky], 0],
+    // thumb
+    [[fx - kx - key_padding_x - space_between_keys / 2 - key_x / 2, fy + 2 * ky + 17.25], 0],
+    [[fx - key_padding_x - space_between_keys / 2 - key_x / 2 + 4.0311, fy + 2 * ky + 18.4535], 15],
+    [[fx + kx - key_padding_x - space_between_keys / 2 - key_x / 2 + 9.625 - 6.89, fy + 2 * ky + 21.25 + 11.95], 30 - 90],
+  ];
+  if ($preview) {
+    translate([outer_padding + 1, outer_padding, 5])
+      union() {
+        for (key_corner = key_corners) {
+          marker(key_corner[0]);
+        }
+      }
+  }
+
+  translate([1, 0, 0])
+  difference() {
+    case();
+
+    translate([outer_padding, outer_padding, 0]) {
+      // orientation specific cutouts
+      for (key_corner = key_corners) {
+        translated_hotswap_socket(key_corner[0], key_corner[1], [1.2, 1.2, 1.2]);
+      }
+
+      for (key_corner = key_corners) {
+        translated_switch_pin_recess(key_corner[0], key_corner[1]);
+      }
+
+      for (key_corner = key_corners) {
+        translated_diode(key_corner[0], key_corner[1]);
+      }
+    }
+  }
+}
+
+module left_case() {
+  // first key bottom left coord
+  fx = -105.019 - 13.8;
+  fy = 6.73;
+
+  key_corners = [
+    // inner
+    [[fx, fy], 0],
+    [[fx, fy + ky], 0],
+    [[fx, fy + 2 * ky], 0],
+    // index
+    [[fx + kx, fy + index_stagger * ky], 0],
+    [[fx + kx, fy + ky + index_stagger * ky], 0],
+    [[fx + kx, fy + 2 * ky + index_stagger * ky], 0],
+    // middle
+    [[fx + 2 * kx, fy + middle_stagger * ky], 0],
+    [[fx + 2 * kx, fy + ky + middle_stagger * ky], 0],
+    [[fx + 2 * kx, fy + 2 * ky + middle_stagger * ky], 0],
+    // ring
+    [[fx + 3 * kx, fy + ring_stagger * ky], 0],
+    [[fx + 3 * kx, fy + ky + ring_stagger * ky], 0],
+    [[fx + 3 * kx, fy + 2 * ky + ring_stagger * ky], 0],
+    // pinkie
+    [[fx + 4 * kx, fy + pinkie_stagger * ky], 0],
+    [[fx + 4 * kx, fy + ky + pinkie_stagger * ky], 0],
+    [[fx + 4 * kx, fy + 2 * ky + pinkie_stagger * ky], 0],
+    // outer
+    [[fx + 5 * kx, fy + outer_stagger * ky], 0],
+    [[fx + 5 * kx, fy + ky + outer_stagger * ky], 0],
+    [[fx + 5 * kx, fy + 2 * ky + outer_stagger * ky], 0],
+    // thumb
+    [[fx + kx + key_padding_x + space_between_keys / 2 + key_x / 2, fy + 2 * ky + 17.25], 0],
+    [[fx + key_padding_x + space_between_keys / 2 + key_x / 2 - 4.0311 + 0.48, fy + 2 * ky + 21.4535 + 0.58], 360 - 15],
+    [[fx - kx + key_padding_x + space_between_keys / 2 + key_x / 2 + 9.625 + 1.445 - 6.9, fy + 2 * ky + 21.25], 60],
+  ];
+
+  if ($preview) {
+    translate([outer_padding - 1, outer_padding, 6])
+      union() {
+        for (key_corner = key_corners) {
+          marker(key_corner[0]);
+        }
+      }
+  }
+
+  translate([-1, 0, 0]) difference() {
+    mirror([1, 0, 0]) case();
+
+    translate([outer_padding, outer_padding, 0]) {
+      // orientation specific cutouts
+      for (key_corner = key_corners) {
+        translated_hotswap_socket(key_corner[0], key_corner[1], [1.2, 1.2, 1.2]);
+      }
+
+      for (key_corner = key_corners) {
+        translated_switch_pin_recess(key_corner[0], key_corner[1]);
+      }
+
+      for (key_corner = key_corners) {
+        translated_diode(key_corner[0], key_corner[1]);
+      }
+    }
+  }
 }
 
 module marker(coord = [0, 0]) {
@@ -295,6 +371,8 @@ module usb_and_reset_switch_cutout() {
   );
 }
 
-// frontplate_and_pcb();
+translate([-1, 0, 0]) mirror([1, 0, 0]) frontplate_and_pcb();
+translate([1, 0, 0]) frontplate_and_pcb();
 
-case();
+right_case();
+left_case();
