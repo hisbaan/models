@@ -17,6 +17,9 @@ mcu_width = 18.1;
 mcu_length = 23.1;
 mcu_port_offset = 0.5;
 
+mcu_holder_backstop_height = 0.75;
+mcu_holder_backstop_radius = 2;
+
 port_width = 9.1;
 port_height = 3.1;
 mcu_corner_to_port = 4.55;

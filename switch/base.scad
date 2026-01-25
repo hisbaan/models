@@ -12,7 +12,7 @@ module mcu_holder() {
       anchor=FRONT + LEFT + BOTTOM
     );
     // mcu cutout
-    translate([case_wall_thickness, case_floor_thickness, case_floor_thickness + epsilon]) cuboid(
+    translate([case_wall_thickness, case_wall_thickness, case_floor_thickness + epsilon]) cuboid(
         [
           mcu_length,
           mcu_width,
@@ -27,6 +27,10 @@ module mcu_holder() {
         anchor=FRONT + LEFT + BOTTOM
       );
   }
+  translate([mcu_length + case_wall_thickness, case_wall_thickness, case_floor_thickness + mcu_thickness + 1])
+    cyl(h=mcu_holder_backstop_height, r=mcu_holder_backstop_radius, anchor=TOP);
+  translate([mcu_length + case_wall_thickness, mcu_width + case_wall_thickness, case_floor_thickness + mcu_thickness + 1])
+    cyl(h=mcu_holder_backstop_height, r=mcu_holder_backstop_radius, anchor=TOP);
 }
 
 module screw_hole() {
