@@ -8,7 +8,7 @@ magnet_horiz_padding = 1;
 magnet_radius = 3.1;
 magnet_height = 2.2;
 
-hook_diameter = 15;
+hook_diameter = 25;
 hook_thickness = 3;
 
 J_extension = 3;
